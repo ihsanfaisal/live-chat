@@ -28,3 +28,32 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig)
 const db = getFirestore(app)
 const messagesCollection = collection(db, "messages")
+
+// Menentukan elemen-elemen DOM yang diperlukan
+const chatForm = document.getElementById("chat-form")
+const usernameInput = document.getElementById("username")
+const messageInput = document.getElementById("message")
+const chatBox = document.getElementById("chat-box")
+
+// Fitur kirim pesan
+chatForm.addEventListener("submit", async (event) => {
+    event.preventDefault()
+
+    const username = usernameInput.value.trim()
+    const message = messageInput.value.trim()
+
+    if (username && message) {
+        // kirim ke Firestore
+        try {
+            await addDoc(messagesCollection, {
+                username: username,
+                message: message,
+                waktu: serverTimestamp()
+            })
+            // bersihkan input setelah mengirim pesan
+            messageInput.value = ""
+        } catch (error) {
+            console.log("Gagal mengirim pesan:", error)
+        }
+    }
+})
