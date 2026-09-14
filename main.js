@@ -79,6 +79,9 @@ onSnapshot(queryPesan, (cuplikan) => {
         // render pesan (memanggil fungsi renderPesan)
         renderPesan(data.username, data.message, waktu)
     })
+
+    // scroll chatBox ke bawah setiap kali ada pesan baru
+    chatBox.scrollTop = chatBox.scrollHeight
 })
 
 function renderPesan(username, message, waktu) {
