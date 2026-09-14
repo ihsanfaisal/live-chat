@@ -91,10 +91,13 @@ function renderPesan(username, message, waktu) {
     // menambah nama class message-card ke elemen messageDiv
     messageDiv.classList.add("message-card")
 
+    // memanggil fungsi stringToColor untuk mendapatkan warna berdasarkan username
+    const warnaUser = stringToColor(username)
+
     // menambahkan konten pesan ke messageDiv
     messageDiv.innerHTML = `
         <div class="message-content">
-            <strong>${username}</strong>
+            <strong style="color: ${warnaUser}">${username}</strong>
             <span>${message}</span>
         </div>
         <span class="time">${waktu}</span>
@@ -102,4 +105,15 @@ function renderPesan(username, message, waktu) {
 
     // menambahkan messageDiv ke chatBox
     chatBox.appendChild(messageDiv)
+}
+
+// Fungsi untuk mengubah String Nama menjadi Warna (HSL) yang konsisten
+function stringToColor(str) {
+    let hash = 0
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash)
+    }
+    // Ambil nilai Hue 0 - 360, dengan saturation 65% & Lightness 40% agar warna tetap kontras/jelas
+    const hue = Math.abs(hash) % 360
+    return `hsl(${hue}, 65%, 40%)`
 }
