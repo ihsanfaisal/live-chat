@@ -57,3 +57,46 @@ chatForm.addEventListener("submit", async (event) => {
         }
     }
 })
+
+// Fitur Pesan Listener (Realtime)
+const queryPesan = query(messagesCollection, orderBy("waktu", "asc"))
+
+onSnapshot(queryPesan, (cuplikan) => {
+    // Bersihkan chatBox sebelum menampilkan pesan baru
+    chatBox.innerHTML = ""
+
+    // tampilkan pesan baru di chatBox
+    cuplikan.forEach((doc) => {
+        // ambil data dari dokumen
+        const data = doc.data()
+
+        // membuat tampilan waktu
+        const waktu = data.waktu.toDate().toLocaleTimeString(
+            [],
+            { hour: '2-digit', minute: '2-digit' }
+        )
+
+        // render pesan (memanggil fungsi renderPesan)
+        renderPesan(data.username, data.message, waktu)
+    })
+})
+
+function renderPesan(username, message, waktu) {
+    // buat elemen untuk menampilkan pesan
+    const messageDiv = document.createElement("div")
+
+    // menambah nama class message-card ke elemen messageDiv
+    messageDiv.classList.add("message-card")
+
+    // menambahkan konten pesan ke messageDiv
+    messageDiv.innerHTML = `
+        <div class="message-content">
+            <strong>${username}</strong>
+            <span>${message}</span>
+        </div>
+        <span class="time">${waktu}</span>
+    ` // backtick
+
+    // menambahkan messageDiv ke chatBox
+    chatBox.appendChild(messageDiv)
+}
